@@ -1,7 +1,7 @@
 diff --git a/Makefile b/Makefile
 --- a/Makefile
 +++ b/Makefile
-@@ -437,7 +437,7 @@ endif
+@@ -442,7 +442,7 @@ endif
  HOSTPKG_CONFIG	= pkg-config
 
  KBUILD_USERHOSTCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
@@ -10,7 +10,7 @@ diff --git a/Makefile b/Makefile
  KBUILD_USERCFLAGS  := $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
  KBUILD_USERLDFLAGS := $(USERLDFLAGS)
 
-@@ -462,7 +462,7 @@ endif
+@@ -474,7 +474,7 @@ endif
  
  KBUILD_HOSTCFLAGS   := $(KBUILD_USERHOSTCFLAGS) $(HOST_LFS_CFLAGS) \
  		       $(HOSTCFLAGS) -I $(srctree)/scripts/include
@@ -19,19 +19,19 @@ diff --git a/Makefile b/Makefile
  		       -I $(srctree)/scripts/include
  KBUILD_HOSTRUSTFLAGS := $(rust_common_flags) -O -Cstrip=debuginfo \
  			-Zallow-features= $(HOSTRUSTFLAGS)
-@@ -800,7 +955,7 @@
- KBUILD_CFLAGS	+= -fno-delete-null-pointer-checks
- 
+@@ -757,7 +757,7 @@ KBUILD_CFLAGS       += $(call cc-disable-warning, format-overflow)
+ KBUILD_CFLAGS  += $(call cc-disable-warning, address-of-packed-member)
+
  ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
 -KBUILD_CFLAGS += -O2
 +KBUILD_CFLAGS += -O3
- # Perform swing modulo scheduling immediately before the first scheduling pass.
- # This pass looks at innermost loops and reorders their instructions by
- # overlapping different iterations.
+ KBUILD_RUSTFLAGS += -Copt-level=2
+ else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+ KBUILD_CFLAGS += -Os
 diff --git a/init/Kconfig b/init/Kconfig
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -1474,10 +1474,10 @@ choice
+@@ -1401,10 +1401,10 @@ choice
  	default CC_OPTIMIZE_FOR_PERFORMANCE
 
  config CC_OPTIMIZE_FOR_PERFORMANCE
